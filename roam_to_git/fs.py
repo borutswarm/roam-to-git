@@ -72,6 +72,8 @@ def save_files(save_format: str, directory: Path, contents: Dict[str, str]):
                         content = jet_stdout.decode()
                     except IOError:
                         logger.debug("Jet not installed, skipping EDN pretty printing")
+                    except Exception as e:
+                        logger.debug("Jet error: %s" % e)
 
                 f.write(content)
 
