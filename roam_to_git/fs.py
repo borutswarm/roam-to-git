@@ -65,11 +65,14 @@ def save_files(save_format: str, directory: Path, contents: Dict[str, str]):
             else:  # markdown, formatted, edn
                 if save_format == 'edn':
                     try:
+                        logger.debug("Jet stdin length: %d" % len(content))
                         jet = Popen(
                             ["jet", "--edn-reader-opts", "{:default tagged-literal}", "--pretty"],
                             stdout=PIPE, stdin=PIPE, stderr=STDOUT)
                         jet_stdout, _ = jet.communicate(input=str.encode(content))
+                        logger.debug("Jet stdout length: %d" % len(jet_stdout))
                         content = jet_stdout.decode()
+                        logger.debug("Jet decoded stdout length: %d" % len(content))
                     except IOError:
                         logger.debug("Jet not installed, skipping EDN pretty printing")
                     except Exception as e:
